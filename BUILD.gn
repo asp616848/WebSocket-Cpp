@@ -1,0 +1,16 @@
+executable("websocket_client") {
+  sources = [
+    "src/main.cpp",
+    "src/WebSocket.cpp",
+    "src/CLI.cpp",
+  ]
+  include_dirs = [ "include" ]
+}
+
+config("debug") {
+  cflags = [ "-g", "-O0" ]
+}
+
+config("release") {
+  cflags = [ "-O2" ]
+}

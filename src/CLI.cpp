@@ -1,7 +1,8 @@
 // CLI.cpp
-#include "CLI.h"
+#include "../include/CLI.h"
 #include <iostream>
 
+// Implementation of getUserInput()
 std::string CLI::getUserInput() {
     std::string input;
     std::cout << "Enter message: ";
@@ -9,6 +10,7 @@ std::string CLI::getUserInput() {
     return input;
 }
 
+// Implementation of displayMessage()
 void CLI::displayMessage(const std::string& message) {
     std::cout << "Server: " << message << std::endl;
 }

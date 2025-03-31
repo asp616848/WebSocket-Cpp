@@ -4,28 +4,26 @@
 #include <boost/asio/connect.hpp>
 #include <boost/asio/ip/tcp.hpp>
 #include <iostream>
-#include <string>
 
-namespace beast = boost::beast; // from <boost/beast.hpp>
-namespace websocket = beast::websocket; // from <boost/beast/websocket.hpp>
-namespace net = boost::asio; // from <boost/asio.hpp>
+namespace beast = boost::beast;
+namespace websocket = beast::websocket;
+namespace net = boost::asio;
 using tcp = net::ip::tcp;
 
-class WebSocket {
+// Define the implementation class
+class WebSocket::Impl {
 public:
+    Impl() : ws(ioc) {}
+
     bool connect(const std::string& url) {
         try {
-            // Resolve the server address
             auto const pos = url.find("://");
             auto const host = url.substr(pos + 3);
-            
+
             tcp::resolver resolver(ioc);
             auto const results = resolver.resolve(host, "80");
 
-            // Connect to the server
             net::connect(ws.next_layer(), results.begin(), results.end());
-
-            // Perform the WebSocket handshake
             ws.handshake(host, "/");
             return true;
         } catch (const beast::system_error& se) {
@@ -65,5 +63,14 @@ public:
 
 private:
     net::io_context ioc;
-    websocket::stream<tcp::socket> ws{ioc};
+    websocket::stream<tcp::socket> ws;
 };
+
+// Proxy methods for WebSocket
+WebSocket::WebSocket() : impl(std::make_unique<Impl>()) {}
+WebSocket::~WebSocket() = default;
+
+bool WebSocket::connect(const std::string& url) { return impl->connect(url); }
+bool WebSocket::sendMessage(const std::string& message) { return impl->sendMessage(message); }
+std::string WebSocket::receiveMessage() { return impl->receiveMessage(); }
+void WebSocket::close() { impl->close(); }

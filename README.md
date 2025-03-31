@@ -1,6 +1,6 @@
 # WebSocket Cpp
  
-project/
+WEBSOCKET-CPP/
 ├── src/                # Source files
 │   ├── main.cpp        # Entry point
 │   ├── WebSocket.cpp   # WebSocket client implementation

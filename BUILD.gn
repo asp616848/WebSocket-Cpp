@@ -1,16 +1,80 @@
-executable("websocket_client") {
-  sources = [
-    "src/main.cpp",
-    "src/WebSocket.cpp",
-    "src/CLI.cpp",
+# BUILD.gn
+buildconfig = "//build/config/BUILDCONFIG.gn"
+
+# Define common compiler flags
+config("compiler_flags") {
+  cflags = [
+    "-Wall",
+    "-Wextra",
+    "-pedantic",
+    "-std=c++17",
   ]
-  include_dirs = [ "include" ]
 }
 
+# Define debug configuration
 config("debug") {
   cflags = [ "-g", "-O0" ]
+  defines = [ "DEBUG" ]
 }
 
+# Define release configuration
 config("release") {
-  cflags = [ "-O2" ]
+  cflags = [ "-O3" ]
+  defines = [ "NDEBUG" ]
+}
+
+# WebSocket library target
+static_library("websocket") {
+  sources = [
+    "src/WebSocket.cpp",
+    "include/WebSocket.h",
+  ]
+  include_dirs = [ "include" ]
+  configs += [ ":compiler_flags" ]
+
+  # Add Boost libraries
+  libs = [
+    "boost_system",
+    "boost_beast",
+  ]
+}
+
+# CLI library target
+static_library("cli") {
+  sources = [
+    "src/CLI.cpp",
+    "include/CLI.h",
+  ]
+  include_dirs = [ "include" ]
+  configs += [ ":compiler_flags" ]
+}
+
+# Main executable target
+executable("websocket_client") {
+  sources = [ "src/main.cpp" ]
+  include_dirs = [ "include" ]
+  configs += [ ":compiler_flags" ]
+  deps = [
+    ":websocket",
+    ":cli",
+  ]
+}
+
+# Test executable target
+executable("websocket_test") {
+  sources = [ "tests/WebSocketTest.cpp" ]
+  include_dirs = [ "include" ]
+  configs += [ ":compiler_flags" ]
+  deps = [ ":websocket" ]
+  
+  # Add test framework (e.g., Google Test)
+  libs = [ "gtest", "gtest_main" ]
+}
+
+# Group target for all builds
+group("all") {
+  deps = [
+    ":websocket_client",
+    ":websocket_test",
+  ]
 }

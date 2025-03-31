@@ -63,7 +63,19 @@ public:
 
     bool sendMessage(const std::string& message) {
         try {
+            ws.text(true);  // Set to text mode
             ws.write(net::buffer(message));
+            return true;
+        } catch (const beast::system_error& se) {
+            std::cerr << "Error: " << se.what() << "\n";
+            return false;
+        }
+    }
+
+    bool sendBinaryMessage(const std::vector<uint8_t>& data) {
+        try {
+            ws.binary(true);  // Set to binary mode
+            ws.write(net::buffer(data));
             return true;
         } catch (const beast::system_error& se) {
             std::cerr << "Error: " << se.what() << "\n";
@@ -82,6 +94,27 @@ public:
         }
     }
 
+    std::vector<uint8_t> receiveBinaryMessage() {
+        try {
+            beast::flat_buffer buffer;
+            ws.read(buffer);
+            
+            // Convert buffer to vector<uint8_t>
+            auto data = buffer.data();
+            auto size = buffer.size();
+            const unsigned char* bytes = static_cast<const unsigned char*>(data.data());
+            return std::vector<uint8_t>(bytes, bytes + size);
+        } catch (const beast::system_error& se) {
+            std::cerr << "Error receiving binary message: " << se.what() << "\n";
+            return std::vector<uint8_t>();
+        }
+    }
+
+    void setBinaryMode(bool binary) {
+        binary_mode = binary;
+        ws.binary(binary);
+    }
+
     void close() {
         try {
             beast::error_code ec;
@@ -94,10 +127,12 @@ public:
         }
     }
 
+
 private:
     net::io_context ioc;
     ssl::context ctx;
     websocket::stream<ssl::stream<tcp::socket>> ws;
+    bool binary_mode;
 };
 
 // Proxy methods for WebSocket
@@ -106,5 +141,8 @@ WebSocket::~WebSocket() = default;
 
 bool WebSocket::connect(const std::string& url) { return impl->connect(url); }
 bool WebSocket::sendMessage(const std::string& message) { return impl->sendMessage(message); }
+bool WebSocket::sendBinaryMessage(const std::vector<uint8_t>& data) { return impl->sendBinaryMessage(data); }
 std::string WebSocket::receiveMessage() { return impl->receiveMessage(); }
+std::vector<uint8_t> WebSocket::receiveBinaryMessage() { return impl->receiveBinaryMessage(); }
+void WebSocket::setBinaryMode(bool binary) { impl->setBinaryMode(binary); }
 void WebSocket::close() { impl->close(); }

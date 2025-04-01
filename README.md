@@ -37,7 +37,8 @@ clang++ main.cpp WebSocketClient.cpp FileHandler.cpp StringUtils.cpp WebSocket.c
 ```
 For test case:
 ```
-clang++ ../tests/WebSocketTest.cpp WebSocket.cpp WebSocketConnect.cpp -o websocket_test -Iinclude -I. -lboost_system -lpthread -lssl -lcrypto -lgtest -lgtest_main
+/src$ clang++ ../tests/WebSocketTest.cpp WebSocket.cpp WebSocketConnect.cpp -o websocket_test -Iinclude -I. -lboost_system -lpthread -lssl -lcrypto -lgtest -lgtest_main
+/src$ ./websocket_test 
 ```
 ##
 

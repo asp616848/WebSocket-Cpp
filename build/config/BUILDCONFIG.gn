@@ -1,0 +1,22 @@
+# Set default toolchain
+set_default_toolchain("//build/toolchain:gcc")
+
+# Define is_debug variable (will be overridden by --args)
+declare_args() {
+  is_debug = true
+}
+
+# Define default configs that apply to all targets
+default_compiler_configs = [
+  "//:default_compiler_flags",
+]
+
+
+# Set defaults
+set_defaults("executable") {
+  configs = default_compiler_configs
+}
+
+set_defaults("static_library") {
+  configs = default_compiler_configs
+}

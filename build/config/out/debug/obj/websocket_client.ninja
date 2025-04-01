@@ -1,0 +1,17 @@
+include_dirs = -I../../../../include
+cflags = -Wall -Wextra -pedantic -std=c++17 -g -O0
+cflags_cc =
+target_out_dir = obj
+target_output_name = websocket_client
+
+build obj/src/websocket_client.main.o: cxx ../../../../src/main.cpp
+  source_file_part = main.cpp
+  source_name_part = main
+
+build websocket_client: link obj/src/websocket_client.main.o obj/websocket.a obj/cli.a
+  ldflags =
+  libs = -lboost_system
+  frameworks =
+  swiftmodules =
+  output_extension = 
+  output_dir = 

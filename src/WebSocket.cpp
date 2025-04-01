@@ -15,7 +15,7 @@ using tcp = net::ip::tcp;
 namespace ssl = net::ssl;
 
 // Custom teardown function for SSL WebSocket
-void teardown(beast::role_type role, ssl::stream<tcp::socket>& ssl_socket, beast::error_code& ec) {
+void teardown( ssl::stream<tcp::socket>& ssl_socket, beast::error_code& ec) {
     ssl_socket.shutdown(ec);
 }
 

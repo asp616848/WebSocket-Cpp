@@ -1,0 +1,14 @@
+include_dirs = -I../../../include
+cflags = -Wall -Wextra -pedantic -std=c++17
+cflags_cc =
+target_out_dir = obj
+target_output_name = cli
+
+build obj/src/cli.CLI.o: cxx ../../../src/CLI.cpp
+  source_file_part = CLI.cpp
+  source_name_part = CLI
+
+build obj/cli.a: alink obj/src/cli.CLI.o
+  arflags =
+  output_extension = .a
+  output_dir = 

@@ -1,0 +1,17 @@
+include_dirs = -I../../../include
+cflags = -Wall -Wextra -pedantic -std=c++17 -O3
+cflags_cc =
+target_out_dir = obj
+target_output_name = websocket_test
+
+build obj/tests/websocket_test.WebSocketTest.o: cxx ../../../tests/WebSocketTest.cpp
+  source_file_part = WebSocketTest.cpp
+  source_name_part = WebSocketTest
+
+build websocket_test: link obj/tests/websocket_test.WebSocketTest.o obj/websocket.a
+  ldflags =
+  libs = -lgtest -lgtest_main -lpthread -lboost_system -lssl -lcrypto
+  frameworks =
+  swiftmodules =
+  output_extension = 
+  output_dir = 

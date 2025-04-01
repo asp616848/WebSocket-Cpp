@@ -4,7 +4,25 @@
 
 ### Folder Structure: 
 ![Folder Structure](projImages/image.png)
-
+WEBSOCKET-CPP/
+├── Build/                # Build files
+│   ├── config            # config point
+│   │    └── BUILDCONFIG.gn   
+│   └── toolchain         # toolchain
+│        └── BUILD.gn      
+│          # Command-line interface implementation
+├── src/                # Source files
+│   ├── main.cpp        # Entry point
+│   ├── WebSocket.cpp   # WebSocket client implementation
+│   └── CLI.cpp         # Command-line interface implementation
+├── include/            # Header files
+│   ├── WebSocket.h
+│   └── CLI.h
+├── tests/              # Unit tests
+│   └── WebSocketTest.cpp
+├── BUILD.gn            # GN build root
+├── .gn            # GN build configuration
+└── README.md           # Documentation
 
 
 ##

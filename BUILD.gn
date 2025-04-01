@@ -25,7 +25,9 @@ config("release") {
 static_library("websocket") {
   sources = [
     "src/WebSocket.cpp",
+    "src/WebSocketConnect.cpp",
     "include/WebSocket.h",
+    
   ]
   include_dirs = [ "include" ]
   libs = [

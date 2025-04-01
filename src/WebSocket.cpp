@@ -1,3 +1,4 @@
+// WebSocket.cpp (your original file)
 #include "../include/WebSocket.h"
 #define BOOST_BEAST_ALLOW_SSL_STREAM
 #include <boost/beast/websocket/ssl.hpp>
@@ -15,9 +16,15 @@ using tcp = net::ip::tcp;
 namespace ssl = net::ssl;
 
 // Custom teardown function for SSL WebSocket
-void teardown( ssl::stream<tcp::socket>& ssl_socket, beast::error_code& ec) {
+void teardown(ssl::stream<tcp::socket>& ssl_socket, beast::error_code& ec) {
     ssl_socket.shutdown(ec);
 }
+
+// Declaration of the external connect function
+bool connectWebSocket(
+    websocket::stream<ssl::stream<tcp::socket>>& ws,
+    net::io_context& ioc,
+    const std::string& url);
 
 // Define the implementation class
 class WebSocket::Impl {
@@ -25,42 +32,11 @@ public:
     Impl() : ctx(ssl::context::tlsv12_client), ws(ioc, ctx) {}
 
     bool connect(const std::string& url) {
-        try {
-            auto const pos = url.find("://");
-            if (pos == std::string::npos) {
-                std::cerr << "Invalid URL format\n";
-                return false;
-            }
-            auto const host = url.substr(pos + 3);
-            auto const port = "443";  // WebSocket Secure (WSS) port
-
-            tcp::resolver resolver(ioc);
-            auto const results = resolver.resolve(host, port);
-
-            // Connect the underlying TCP layer
-            net::connect(ws.next_layer().next_layer(), results.begin(), results.end());
-
-            // Set SNI Hostname (many hosts need this to handshake successfully)
-            if (!SSL_set_tlsext_host_name(ws.next_layer().native_handle(), host.c_str())) {
-                beast::error_code ec{static_cast<int>(::ERR_get_error()), net::error::get_ssl_category()};
-                std::cerr << "Error setting SNI hostname: " << ec.message() << "\n";
-                return false;
-            }
-
-            // Perform SSL Handshake
-            ws.next_layer().handshake(ssl::stream_base::client);
-
-            // Perform WebSocket Handshake
-            ws.handshake(host, "/");
-
-            std::cout << "Connected to " << host << "!\n";
-            return true;
-        } catch (const beast::system_error& se) {
-            std::cerr << "Error: " << se.what() << "\n";
-            return false;
-        }
+        // Call the external function
+        return connectWebSocket(ws, ioc, url);
     }
 
+    // Rest of your implementation remains the same
     bool sendMessage(const std::string& message) {
         try {
             ws.text(true);  // Set to text mode
@@ -126,7 +102,6 @@ public:
             std::cerr << "Error: " << se.what() << "\n";
         }
     }
-
 
 private:
     net::io_context ioc;

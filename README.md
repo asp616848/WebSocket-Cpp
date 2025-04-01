@@ -7,10 +7,17 @@
 
 
 
+##
+
 in src run : 
 ```
 g++ main.cpp WebSocket.cpp CLI.cpp -o websocket_client -lboost_system -lpthread -lssl -lcrypto
 ```
+or
+```
+clang++ main.cpp WebSocket.cpp CLI.cpp -o websocket_client -Iinclude -lboost_system -lpthread -lssl -lcrypto
+```
+##
 
 
 Build:
@@ -32,3 +39,4 @@ proj/src$ ninja -C out/debug
 ninja: Entering directory `out/debug'
 [9/9] STAMP obj/all.stamp
 ```
+

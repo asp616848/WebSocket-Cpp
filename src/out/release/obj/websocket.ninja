@@ -7,8 +7,11 @@ target_output_name = websocket
 build obj/src/websocket.WebSocket.o: cxx ../../../src/WebSocket.cpp
   source_file_part = WebSocket.cpp
   source_name_part = WebSocket
+build obj/src/websocket.WebSocketConnect.o: cxx ../../../src/WebSocketConnect.cpp
+  source_file_part = WebSocketConnect.cpp
+  source_name_part = WebSocketConnect
 
-build obj/websocket.a: alink obj/src/websocket.WebSocket.o
+build obj/websocket.a: alink obj/src/websocket.WebSocket.o obj/src/websocket.WebSocketConnect.o
   arflags =
   output_extension = .a
   output_dir = 

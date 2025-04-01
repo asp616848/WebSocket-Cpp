@@ -19,9 +19,13 @@ build build.ninja: phony build.ninja.stamp
 subninja toolchain.ninja
 
 build cli: phony obj/cli.a
+build file_handler: phony obj/file_handler.a
+build string_utils: phony obj/string_utils.a
 build websocket: phony obj/websocket.a
 build $:all: phony obj/all.stamp
 build $:cli: phony obj/cli.a
+build $:file_handler: phony obj/file_handler.a
+build $:string_utils: phony obj/string_utils.a
 build $:websocket: phony obj/websocket.a
 build $:websocket_client: phony websocket_client
 build $:websocket_test: phony websocket_test
@@ -29,6 +33,8 @@ build $:websocket_test: phony websocket_test
 build all: phony $
     obj/all.stamp $
     obj/cli.a $
+    obj/file_handler.a $
+    obj/string_utils.a $
     obj/websocket.a $
     websocket_client $
     websocket_test

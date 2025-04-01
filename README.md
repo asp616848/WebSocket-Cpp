@@ -29,11 +29,15 @@ WEBSOCKET-CPP/
 
 in src run : 
 ```
-g++ main.cpp WebSocket.cpp CLI.cpp -o websocket_client -lboost_system -lpthread -lssl -lcrypto
+g++ main.cpp WebSocketClient.cpp FileHandler.cpp StringUtils.cpp WebSocket.cpp WebSocketConnect.cpp CLI.cpp -o websocket_client -lboost_system -lpthread -lssl -lcrypto
 ```
 or
 ```
-clang++ main.cpp WebSocket.cpp CLI.cpp -o websocket_client -Iinclude -lboost_system -lpthread -lssl -lcrypto
+clang++ main.cpp WebSocketClient.cpp FileHandler.cpp StringUtils.cpp WebSocket.cpp WebSocketConnect.cpp CLI.cpp -o websocket_client -Iinclude -I. -lboost_system -lpthread -lssl -lcrypto
+```
+For test case:
+```
+clang++ ../tests/WebSocketTest.cpp WebSocket.cpp WebSocketConnect.cpp -o websocket_test -Iinclude -I. -lboost_system -lpthread -lssl -lcrypto -lgtest -lgtest_main
 ```
 ##
 

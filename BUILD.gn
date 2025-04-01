@@ -6,7 +6,7 @@ config("default_compiler_flags") {
     "-pedantic",
     "-std=c++17",
   ]
-  include_dirs = [ "//include" ]
+  include_dirs = [ "//include", "//src" ]
 }
 
 # Define debug configuration
@@ -26,34 +26,54 @@ static_library("websocket") {
   sources = [
     "src/WebSocket.cpp",
     "src/WebSocketConnect.cpp",
+    "src/WebSocketClient.cpp",
     "include/WebSocket.h",
-    
+    "src/WebSocketClient.h",
   ]
-  include_dirs = [ "include" ]
+  include_dirs = [ "include", "src" ]
   libs = [
     "boost_system",
     "ssl",
     "crypto"
   ]
 }
-
 
 # CLI library target
 static_library("cli") {
   sources = [
     "src/CLI.cpp",
+    "include/CLI.h",
   ]
   include_dirs = [ "include" ]
 }
 
+# File Handler library target
+static_library("file_handler") {
+  sources = [
+    "src/FileHandler.cpp",
+    "src/FileHandler.h",
+  ]
+  include_dirs = [ "src" ]
+}
+
+# String Utils library target
+static_library("string_utils") {
+  sources = [
+    "src/StringUtils.cpp",
+    "src/StringUtils.h",
+  ]
+  include_dirs = [ "src" ]
+}
 
 # Main executable target
 executable("websocket_client") {
   sources = [ "src/main.cpp" ]
-  include_dirs = [ "include" ]
+  include_dirs = [ "include", "src" ]
   deps = [
     ":websocket",
     ":cli",
+    ":file_handler",
+    ":string_utils",
   ]
   libs = [
     "boost_system",
@@ -62,11 +82,14 @@ executable("websocket_client") {
   ]
 }
 
-
 # Test executable target
 executable("websocket_test") {
   sources = [ "tests/WebSocketTest.cpp" ]
-  deps = [ ":websocket" ]
+  deps = [ 
+    ":websocket",
+    ":file_handler",
+    ":string_utils",
+  ]
   
   # Add test framework
   libs = [ "gtest", "gtest_main", "pthread" ]
@@ -77,11 +100,22 @@ executable("websocket_test") {
     configs += [ ":release" ]
   }
 }
+# Test runner action
+action("run_tests") {
+  script = "//scripts/run_tests.sh"
+  inputs = [ "$root_build_dir/websocket_test" ]
+  outputs = [ "$root_build_dir/test_results.xml" ]
+  args = [ rebase_path("$root_build_dir/websocket_test", root_build_dir) ]
+  
+  deps = [ ":websocket_test" ]
+}
+
 
 # Group target for all builds
 group("all") {
   deps = [
     ":websocket_client",
     ":websocket_test",
+    ":run_tests",
   ]
 }

@@ -16,21 +16,3 @@ build build.ninja.stamp: gn
 build build.ninja: phony build.ninja.stamp
   generator = 1
 
-subninja toolchain.ninja
-
-build cli: phony obj/cli.a
-build websocket: phony obj/websocket.a
-build $:all: phony obj/all.stamp
-build $:cli: phony obj/cli.a
-build $:websocket: phony obj/websocket.a
-build $:websocket_client: phony websocket_client
-build $:websocket_test: phony websocket_test
-
-build all: phony $
-    obj/all.stamp $
-    obj/cli.a $
-    obj/websocket.a $
-    websocket_client $
-    websocket_test
-
-default all

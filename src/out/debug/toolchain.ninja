@@ -25,6 +25,8 @@ rule copy
 
 build obj/all.stamp: stamp websocket_client websocket_test
 subninja obj/cli.ninja
+subninja obj/file_handler.ninja
+subninja obj/string_utils.ninja
 subninja obj/websocket.ninja
 subninja obj/websocket_client.ninja
 subninja obj/websocket_test.ninja

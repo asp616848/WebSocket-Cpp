@@ -23,8 +23,18 @@ rule copy
   command = cp -af ${in} ${out}
   description = COPY ${in} ${out}
 
-build obj/all.stamp: stamp websocket_client websocket_test
+build obj/all.stamp: stamp websocket_client websocket_test obj/run_tests.stamp
 subninja obj/cli.ninja
+subninja obj/file_handler.ninja
+rule ___run_tests___build_toolchain_gcc__rule
+  command = python ../../../scripts/run_tests.sh websocket_test
+  description = ACTION //:run_tests(//build/toolchain:gcc)
+  restat = 1
+
+build test_results.xml: ___run_tests___build_toolchain_gcc__rule | ../../../scripts/run_tests.sh websocket_test websocket_test
+
+build obj/run_tests.stamp: stamp test_results.xml
+subninja obj/string_utils.ninja
 subninja obj/websocket.ninja
 subninja obj/websocket_client.ninja
 subninja obj/websocket_test.ninja

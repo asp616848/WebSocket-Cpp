@@ -1,4 +1,4 @@
-include_dirs = -I../../../include
+include_dirs = -I../../../include -I../../../src
 cflags = -Wall -Wextra -pedantic -std=c++17
 cflags_cc =
 target_out_dir = obj
@@ -10,8 +10,11 @@ build obj/src/websocket.WebSocket.o: cxx ../../../src/WebSocket.cpp
 build obj/src/websocket.WebSocketConnect.o: cxx ../../../src/WebSocketConnect.cpp
   source_file_part = WebSocketConnect.cpp
   source_name_part = WebSocketConnect
+build obj/src/websocket.WebSocketClient.o: cxx ../../../src/WebSocketClient.cpp
+  source_file_part = WebSocketClient.cpp
+  source_name_part = WebSocketClient
 
-build obj/websocket.a: alink obj/src/websocket.WebSocket.o obj/src/websocket.WebSocketConnect.o
+build obj/websocket.a: alink obj/src/websocket.WebSocket.o obj/src/websocket.WebSocketConnect.o obj/src/websocket.WebSocketClient.o
   arflags =
   output_extension = .a
   output_dir = 

@@ -6,7 +6,7 @@ config("default_compiler_flags") {
     "-pedantic",
     "-std=c++17",
   ]
-  include_dirs = [ "//include" ]
+  include_dirs = [ "//include", "//src" ]
 }
 
 # Define debug configuration
@@ -27,7 +27,6 @@ static_library("websocket") {
     "src/WebSocket.cpp",
     "src/WebSocketConnect.cpp",
     "include/WebSocket.h",
-    
   ]
   include_dirs = [ "include" ]
   libs = [
@@ -37,15 +36,42 @@ static_library("websocket") {
   ]
 }
 
+# WebSocketClient library target
+static_library("websocket_client_lib") {
+  sources = [
+    "src/WebSocketClient.cpp",
+    "include/WebSocketClient.h",
+  ]
+  include_dirs = [ "include" ]
+  deps = [ ":websocket" ]
+}
+
+# File Handler library target
+static_library("file_handler") {
+  sources = [
+    "src/FileHandler.cpp",
+    "include/FileHandler.h",
+  ]
+  include_dirs = [ "include" ]
+}
+
+# String Utils library target
+static_library("string_utils") {
+  sources = [
+    "src/StringUtils.cpp",
+    "include/StringUtils.h",
+  ]
+  include_dirs = [ "include" ]
+}
 
 # CLI library target
 static_library("cli") {
   sources = [
     "src/CLI.cpp",
+    "include/CLI.h",
   ]
   include_dirs = [ "include" ]
 }
-
 
 # Main executable target
 executable("websocket_client") {
@@ -53,7 +79,10 @@ executable("websocket_client") {
   include_dirs = [ "include" ]
   deps = [
     ":websocket",
+    ":websocket_client_lib",
     ":cli",
+    ":file_handler",
+    ":string_utils",
   ]
   libs = [
     "boost_system",
@@ -61,7 +90,6 @@ executable("websocket_client") {
     "crypto"
   ]
 }
-
 
 # Test executable target
 executable("websocket_test") {

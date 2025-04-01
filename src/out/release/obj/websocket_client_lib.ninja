@@ -1,0 +1,14 @@
+include_dirs = -I../../../include -I../../../src
+cflags = -Wall -Wextra -pedantic -std=c++17
+cflags_cc =
+target_out_dir = obj
+target_output_name = websocket_client_lib
+
+build obj/src/websocket_client_lib.WebSocketClient.o: cxx ../../../src/WebSocketClient.cpp
+  source_file_part = WebSocketClient.cpp
+  source_name_part = WebSocketClient
+
+build obj/websocket_client_lib.a: alink obj/src/websocket_client_lib.WebSocketClient.o || obj/websocket.a
+  arflags =
+  output_extension = .a
+  output_dir = 

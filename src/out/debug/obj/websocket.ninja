@@ -1,4 +1,4 @@
-include_dirs = -I../../../include
+include_dirs = -I../../../include -I../../../src
 cflags = -Wall -Wextra -pedantic -std=c++17
 cflags_cc =
 target_out_dir = obj

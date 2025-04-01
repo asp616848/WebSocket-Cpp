@@ -1,0 +1,14 @@
+include_dirs = -I../../../include -I../../../src
+cflags = -Wall -Wextra -pedantic -std=c++17
+cflags_cc =
+target_out_dir = obj
+target_output_name = string_utils
+
+build obj/src/string_utils.StringUtils.o: cxx ../../../src/StringUtils.cpp
+  source_file_part = StringUtils.cpp
+  source_name_part = StringUtils
+
+build obj/string_utils.a: alink obj/src/string_utils.StringUtils.o
+  arflags =
+  output_extension = .a
+  output_dir = 

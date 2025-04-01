@@ -1,0 +1,14 @@
+include_dirs = -I../../../include -I../../../src
+cflags = -Wall -Wextra -pedantic -std=c++17
+cflags_cc =
+target_out_dir = obj
+target_output_name = file_handler
+
+build obj/src/file_handler.FileHandler.o: cxx ../../../src/FileHandler.cpp
+  source_file_part = FileHandler.cpp
+  source_name_part = FileHandler
+
+build obj/file_handler.a: alink obj/src/file_handler.FileHandler.o
+  arflags =
+  output_extension = .a
+  output_dir = 
